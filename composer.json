@@ -1,0 +1,33 @@
+{
+  "name": "optimistdigital/nova-inline-text-field",
+  "description": "A Laravel Nova inline text field.",
+  "keywords": [
+    "laravel",
+    "nova",
+    "text",
+    "inline",
+    "field"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=7.2.0",
+    "laravel/nova": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "OptimistDigital\\NovaInlineTextField\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "OptimistDigital\\NovaInlineTextField\\NovaInlineTextFieldServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
