@@ -16,7 +16,7 @@ class NovaInlineTextFieldController extends Controller
 
         $resourceClass = $request->resource();
         $resourceValidationRules = $resourceClass::rulesForUpdate($request);
-        $fieldValidationRules = $resourceValidationRules[$attribute];
+        $fieldValidationRules = $resourceValidationRules[$attribute] ?? null;
 
         if (!empty($fieldValidationRules)) {
             $request->validate([$attribute => $fieldValidationRules]);
