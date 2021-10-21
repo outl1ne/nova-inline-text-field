@@ -167,6 +167,7 @@ export default {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     font-size: 14px;
+    max-height: calc(100% - 2px);
   }
 
   &:hover {
