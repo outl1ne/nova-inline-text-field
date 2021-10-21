@@ -54,8 +54,11 @@
 </template>
 
 <script>
+import { InteractsWithResourceInformation } from 'laravel-nova';
+
 export default {
   props: ['resourceName', 'field'],
+  mixins: [InteractsWithResourceInformation],
 
   data: () => ({
     editing: false,
@@ -73,6 +76,7 @@ export default {
     },
 
     startEditing() {
+      if (this.editing) return;
       this.fieldValue = (this.field.value || '').trim();
       this.editing = true;
     },
@@ -92,10 +96,15 @@ export default {
         });
         this.editing = false;
         this.field.value = this.fieldValue;
-        Nova.success('Success');
+
+        Nova.success(
+          this.__('The :resource was updated!', {
+            resource: this.resourceInformation.singularLabel.toLowerCase(),
+          })
+        );
       } catch (e) {
         console.error(e);
-        Nova.error('error updating');
+        Nova.error(this.__('There was a problem submitting the form.'));
       }
       this.loading = false;
     },
