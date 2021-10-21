@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`nova-inline-text-field-index text-${field.textAlign}${editing ? ' -editing' : ''}`"
+    :class="`nova-inline-text-field-index text-${field.textAlign}${editing ? ' -editing' : ''} w-full`"
     @click.stop="startEditing"
   >
     <template v-if="hasValue">
@@ -15,13 +15,12 @@
       </template>
       <template v-else>
         <input
-          :ref="input"
+          ref="input"
           v-model="fieldValue"
           @keypress="onInputKeyPress"
           type="text"
           :disabled="loading"
-          class="form-control form-input form-input-bordered"
-          autofocus
+          class="form-control form-input w-full"
         />
 
         <svg
@@ -79,6 +78,8 @@ export default {
       if (this.editing) return;
       this.fieldValue = (this.field.value || '').trim();
       this.editing = true;
+
+      this.$nextTick(() => this.$refs.input && this.$refs.input.focus());
     },
 
     cancelEditing() {
@@ -129,10 +130,12 @@ export default {
   }
 
   > .edit-icon {
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
     margin-right: 6px;
     margin-bottom: 1px;
+    flex-shrink: 0;
+    min-width: 14px;
   }
 
   > .cancel-icon,
@@ -158,6 +161,12 @@ export default {
 
   > .form-input {
     margin-right: 8px;
+    max-width: 50vw;
+
+    height: 1.75rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 14px;
   }
 
   &:hover {
