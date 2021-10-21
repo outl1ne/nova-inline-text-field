@@ -2,6 +2,7 @@
 
 namespace OptimistDigital\NovaInlineTextField\Http\Controllers;
 
+use Exception;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use OptimistDigital\NovaInlineTextField\InlineText;
@@ -22,18 +23,21 @@ class NovaInlineTextFieldController extends Controller
         }
 
         // Find field in question
-        $model = $request->model()->find($modelId);
-        $resource = new $resourceClass($model);
+        try {
+            $model = $request->model()->find($modelId);
+            $resource = new $resourceClass($model);
 
-        $allFields = collect($resource->fields($request));
-        $field = $allFields->first(function ($field) use ($attribute) {
-            return get_class($field) === InlineText::class && $field->attribute === $attribute;
-        });
+            $allFields = collect($resource->fields($request));
+            $field = $allFields->first(function ($field) use ($attribute) {
+                return get_class($field) === InlineText::class && $field->attribute === $attribute;
+            });
 
-        $field->fillInto($request, $model, $attribute);
+            $field->fillInto($request, $model, $attribute);
+            $model->save();
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
 
-        ray($model, $attribute, $request->{$attribute}, $model->{$attribute});
-
-        $model->save();
+        return response('', 204);
     }
 }
