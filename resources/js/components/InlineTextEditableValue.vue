@@ -80,7 +80,7 @@ export default {
 
     startEditing() {
       if (this.editing) return;
-      this.fieldValue = (this.field.value || '').trim();
+      this.fieldValue = (typeof this.field.value === 'number') ? (this.field.value || '') : (this.field.value || '').trim();
       this.editing = true;
 
       this.$nextTick(() => this.$refs.input && this.$refs.input.focus());
