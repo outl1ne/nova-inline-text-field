@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaInlineTextField;
+namespace Outl1ne\NovaInlineTextField;
 
 use Laravel\Nova\Fields\Text;
 

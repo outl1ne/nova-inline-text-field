@@ -1,7 +1,7 @@
 # Nova Inline Text Field
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/optimistdigital/nova-inline-text-field.svg?style=flat-square)](https://packagist.org/packages/optimistdigital/nova-inline-text-field)
-[![Total Downloads](https://img.shields.io/packagist/dt/optimistdigital/nova-inline-text-field.svg?style=flat-square)](https://packagist.org/packages/optimistdigital/nova-inline-text-field)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/outl1ne/nova-inline-text-field.svg?style=flat-square)](https://packagist.org/packages/outl1ne/nova-inline-text-field)
+[![Total Downloads](https://img.shields.io/packagist/dt/outl1ne/nova-inline-text-field.svg?style=flat-square)](https://packagist.org/packages/outl1ne/nova-inline-text-field)
 
 This [Laravel Nova](https://nova.laravel.com/) package adds an inline text field to Nova's arsenal of fields.
 
@@ -23,7 +23,7 @@ A simple text field that allows the user to edit the value on Index and Detail v
 Install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:
 
 ```bash
-composer require optimistdigital/nova-inline-text-field
+composer require outl1ne/nova-inline-text-field
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ composer require optimistdigital/nova-inline-text-field
 ### General
 
 ```php
-use OptimistDigital\NovaInlineTextField\InlineText;
+use Outl1ne\NovaInlineTextField\InlineText;
 
 public function fields(Request $request) {
     InlineText::make('Name'),

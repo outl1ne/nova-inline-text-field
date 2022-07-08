@@ -1,19 +1,20 @@
 <?php
 
-namespace OptimistDigital\NovaInlineTextField;
+namespace Outl1ne\NovaInlineTextField;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use OptimistDigital\NovaInlineTextField\Http\Controllers\NovaInlineTextFieldController;
+use Outl1ne\NovaInlineTextField\Http\Controllers\NovaInlineTextFieldController;
 
-class NovaInlineTextFieldServiceProvider extends ServiceProvider
+class FieldServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         Nova::serving(function (ServingNova $event) {
-            Nova::script('inline-text', __DIR__ . '/../dist/js/field.js');
+            Nova::script('inline-text-field', __DIR__ . '/../dist/js/entry.js');
+            Nova::style('inline-text-field', __DIR__ . '/../dist/css/entry.css');
         });
 
         $this->app->booted(function () {

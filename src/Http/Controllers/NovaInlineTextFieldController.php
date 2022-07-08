@@ -1,11 +1,11 @@
 <?php
 
-namespace OptimistDigital\NovaInlineTextField\Http\Controllers;
+namespace Outl1ne\NovaInlineTextField\Http\Controllers;
 
 use Exception;
 use Illuminate\Routing\Controller;
+use Outl1ne\NovaInlineTextField\InlineText;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use OptimistDigital\NovaInlineTextField\InlineText;
 
 class NovaInlineTextFieldController extends Controller
 {
