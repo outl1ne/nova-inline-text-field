@@ -19,6 +19,7 @@
         type="text"
         :disabled="loading"
         class="form-control form-input form-input-bordered o1-w-full"
+        @click.stop.capture="true"
       />
 
       <ConfirmIcon @click.stop.capture="!loading ? updateFieldValue() : void 0" />
