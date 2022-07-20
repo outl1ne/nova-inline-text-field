@@ -1,5 +1,5 @@
 <template>
-  <inline-text-editable-value :field="field" :resourceName="resourceName" />
+  <InlineTextEditableValue :field="field" :resourceName="resourceName" />
 </template>
 
 <script>

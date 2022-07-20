@@ -1,6 +1,6 @@
 <template>
   <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
-    <template slot="field">
+    <template #field>
       <input
         class="w-full form-control form-input form-input-bordered"
         @input="handleChange"
@@ -12,22 +12,15 @@
         :list="`${field.attribute}-list`"
       />
 
-      <datalist
-        v-if="field.suggestions && field.suggestions.length > 0"
-        :id="`${field.attribute}-list`"
-      >
-        <option
-          :key="suggestion"
-          v-for="suggestion in field.suggestions"
-          :value="suggestion"
-        />
+      <datalist v-if="field.suggestions && field.suggestions.length > 0" :id="`${field.attribute}-list`">
+        <option :key="suggestion" v-for="suggestion in field.suggestions" :value="suggestion" />
       </datalist>
     </template>
   </default-field>
 </template>
 
 <script>
-import { FormField, HandlesValidationErrors } from 'laravel-nova'
+import { FormField, HandlesValidationErrors } from 'laravel-nova';
 
 export default {
   mixins: [HandlesValidationErrors, FormField],
@@ -42,11 +35,11 @@ export default {
         pattern: this.field.pattern,
         placeholder: this.field.placeholder || this.field.name,
         class: this.errorClasses,
-      }
+      };
     },
 
     extraAttributes() {
-      const attrs = this.field.extraAttributes
+      const attrs = this.field.extraAttributes;
 
       return {
         // Leave the default attributes even though we can now specify
@@ -54,8 +47,8 @@ export default {
         // uses the old field attributes
         ...this.defaultAttributes,
         ...attrs,
-      }
+      };
     },
   },
-}
+};
 </script>

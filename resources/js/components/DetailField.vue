@@ -1,9 +1,9 @@
 <template>
-  <panel-item :field="field">
-    <template slot="value">
-      <inline-text-editable-value :field="field" :resourceName="resourceName" />
+  <PanelItem :field="field">
+    <template #value>
+      <InlineTextEditableValue :field="field" :resourceName="resourceName" />
     </template>
-  </panel-item>
+  </PanelItem>
 </template>
 
 <script>
