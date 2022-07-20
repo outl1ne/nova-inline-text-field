@@ -16,7 +16,7 @@ A simple text field that allows the user to edit the value on Index and Detail v
 
 ## Screenshots
 
-![Index page](./docs/index.gif)
+![Index page](./docs/demo.gif)
 
 ## Installation
 
