@@ -1,14 +1,15 @@
 <template>
   <div
     :class="`nova-inline-text-field-index text-${field.textAlign}${editing ? ' -editing' : ''} w-full`"
+    @click.stop="e => !e.target.classList.contains('inline-icon')"
     @dblclick.stop.capture="startEditing"
   >
     <template v-if="!editing">
       <EditIcon @click.stop.capture="startEditing" />
 
       <div v-if="!hasValue"><p>&mdash;</p></div>
-      <div v-else-if="field.asHtml" v-html="field.value"></div>
-      <span v-else class="whitespace-no-wrap">{{ field.value }}</span>
+      <div v-else-if="field.asHtml" v-html="value"></div>
+      <span v-else class="whitespace-no-wrap">{{ value }}</span>
     </template>
 
     <template v-else>
@@ -46,7 +47,7 @@ export default {
   }),
 
   mounted() {
-    this.fieldValue = this.field.value;
+    this.fieldValue = this.value;
   },
 
   methods: {
@@ -56,7 +57,7 @@ export default {
 
     startEditing() {
       if (this.editing) return;
-      this.fieldValue = typeof this.field.value === 'number' ? this.field.value || '' : (this.field.value || '').trim();
+      this.fieldValue = typeof this.value === 'number' ? this.value || '' : (this.value || '').trim();
       this.editing = true;
 
       this.$nextTick(() => this.$refs.input && this.$refs.input.focus());
@@ -93,7 +94,11 @@ export default {
 
   computed: {
     hasValue() {
-      return this.field.value !== null;
+      return this.value !== null;
+    },
+
+    value() {
+      return this.field.value || this.field.displayedAs;
     },
   },
 };
