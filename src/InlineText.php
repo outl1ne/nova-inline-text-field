@@ -3,6 +3,7 @@
 namespace Outl1ne\NovaInlineTextField;
 
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class InlineText extends Text
 {
@@ -21,5 +22,13 @@ class InlineText extends Text
         /** @var NovaRequest */
         $novaRequest = app()->make(NovaRequest::class);
         if ($novaRequest->isFormRequest()) $this->component = 'text-field';
+
+        // Set max width to 500px
+        $this->maxWidth(500);
+    }
+
+    public function maxWidth(int|null $maxWidthPx = null)
+    {
+        return $this->withMeta(['maxWidth' => $maxWidthPx]);
     }
 }

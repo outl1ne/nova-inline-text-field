@@ -7,9 +7,9 @@
     <template v-if="!editing">
       <EditIcon @click.stop.capture="startEditing" />
 
-      <div v-if="!hasValue"><p>&mdash;</p></div>
-      <div v-else-if="field.asHtml" v-html="value"></div>
-      <span v-else class="whitespace-no-wrap">{{ value }}</span>
+      <div :style="contentStyle" v-if="!hasValue"><p>&mdash;</p></div>
+      <div :style="contentStyle" v-else-if="field.asHtml" v-html="value"></div>
+      <span :style="contentStyle" v-else class="whitespace-no-wrap">{{ value }}</span>
     </template>
 
     <template v-else>
@@ -100,6 +100,12 @@ export default {
     value() {
       return this.field.value || this.field.displayedAs;
     },
+
+    contentStyle() {
+      return {
+        maxWidth: this.field.maxWidth ? `${this.field.maxWidth}px` : void 0,
+      };
+    },
   },
 };
 </script>
@@ -109,6 +115,11 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
+
+  > *:not(input) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   > .edit-icon {
     height: 24px;
