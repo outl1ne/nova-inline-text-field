@@ -22,9 +22,6 @@ class InlineText extends Text
         /** @var NovaRequest */
         $novaRequest = app()->make(NovaRequest::class);
         if ($novaRequest->isFormRequest()) $this->component = 'text-field';
-
-        // Set max width to 500px
-        $this->maxWidth(500);
     }
 
     public function maxWidth(int|null $maxWidthPx = null)
