@@ -71,10 +71,13 @@ export default {
     async updateFieldValue() {
       this.loading = true;
       try {
+        const matchedLensPath = window.location.pathname.match(`/resources/${this.resourceName}/lens/([^/]+)`);
         await Nova.request().post(`/nova-vendor/nova-inline-text-field/update/${this.resourceName}`, {
+          _lensUri: matchedLensPath ? matchedLensPath[1] : null,
           _inlineResourceId: this.field.resourceId,
           _inlineAttribute: this.field.attribute,
           [this.field.attribute]: this.fieldValue,
+          extraData: this.field.extraData,
         });
         this.editing = false;
         this.field.value = this.fieldValue;
