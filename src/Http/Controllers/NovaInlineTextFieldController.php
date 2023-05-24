@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Routing\Controller;
 use Outl1ne\NovaInlineTextField\InlineText;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Lenses\Lens;
 
 class NovaInlineTextFieldController extends Controller
 {
@@ -13,6 +14,7 @@ class NovaInlineTextFieldController extends Controller
     {
         $modelId = $request->_inlineResourceId;
         $attribute = $request->_inlineAttribute;
+        $lensUri = $request->_lensUri;
 
         $resourceClass = $request->resource();
         $resourceValidationRules = $resourceClass::rulesForUpdate($request);
@@ -26,7 +28,10 @@ class NovaInlineTextFieldController extends Controller
         try {
             $model = $request->model()->find($modelId);
             $resource = new $resourceClass($model);
-
+            if ($lensUri) {
+                $resource = collect($resource->lenses($request))
+                    ->firstWhere(fn (Lens $lens) => $lens->uriKey() === $lensUri);
+            }
             $allFields = collect($resource->fields($request));
             $field = $allFields->first(function ($field) use ($attribute) {
                 return get_class($field) === InlineText::class && $field->attribute === $attribute;
