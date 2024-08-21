@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Outl1ne\NovaInlineTextField\InlineText;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
+use Laravel\Nova\Fields\Stack;
 
 class NovaInlineTextFieldController extends Controller
 {
@@ -33,9 +34,7 @@ class NovaInlineTextFieldController extends Controller
                     ->firstWhere(fn (Lens $lens) => $lens->uriKey() === $lensUri);
             }
             $allFields = collect($resource->fields($request));
-            $field = $allFields->first(function ($field) use ($attribute) {
-                return $this->findField($field, $attribute);
-            });
+            $field = $this->findField($allFields, $attribute);
 
             $field->fillInto($request, $model, $attribute);
             $model->save();
@@ -46,29 +45,35 @@ class NovaInlineTextFieldController extends Controller
         return response('', 204);
     }
 
-    /**
-	 * Recursively search for the field within nested Stack fields.
-	 *
-	 * @param  \Laravel\Nova\Fields\Field|Stack|Panel  $field
-	 * @param  string  $attribute
-	 * @return bool
+	/**
+	 * Recursively search for the field, including nested Stack fields.
 	 */
-	protected function findField($field, $attribute)
+	protected function findField(Collection $fields, String $attribute): InlineText|null
 	{
-		// Direct match with InlineText field
-		if (get_class($field) === InlineText::class && $field->attribute === $attribute) {
-			return true;
-		}
+		foreach ($fields as $field) {
+			// Direct match with InlineText field
+			if ($this->isCorrectInlineTextField($field, $attribute)) {
+				return $field;
+			}
 
-		// Search within Stack fields
-		if ($field instanceof Stack || $field instanceof Panel) {
-			foreach ($field->lines as $nestedField) {
-				if ($this->findField($nestedField, $attribute)) {
-					return true;
+			// Search within Stack fields
+			if (get_class($field) === Stack::class) {
+				foreach ($field->lines as $nestedField) {
+					if ($this->isCorrectInlineTextField($nestedField, $attribute)) {
+						return $nestedField;
+					}
 				}
 			}
 		}
 
-		return false;
+		return null;
+	}
+
+	/**
+	 * Check if the field is the InlineText field.
+	 */
+	protected function isCorrectInlineTextField($field, $attribute): bool
+	{
+		return get_class($field) === InlineText::class && $field->attribute === $attribute;
 	}
 }
