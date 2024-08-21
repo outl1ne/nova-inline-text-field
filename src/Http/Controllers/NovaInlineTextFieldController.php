@@ -34,7 +34,7 @@ class NovaInlineTextFieldController extends Controller
             }
             $allFields = collect($resource->fields($request));
             $field = $allFields->first(function ($field) use ($attribute) {
-                return get_class($field) === InlineText::class && $field->attribute === $attribute;
+                return $this->findField($field, $attribute);
             });
 
             $field->fillInto($request, $model, $attribute);
@@ -45,4 +45,30 @@ class NovaInlineTextFieldController extends Controller
 
         return response('', 204);
     }
+
+    /**
+	 * Recursively search for the field within nested Stack fields.
+	 *
+	 * @param  \Laravel\Nova\Fields\Field|Stack|Panel  $field
+	 * @param  string  $attribute
+	 * @return bool
+	 */
+	protected function findField($field, $attribute)
+	{
+		// Direct match with InlineText field
+		if (get_class($field) === InlineText::class && $field->attribute === $attribute) {
+			return true;
+		}
+
+		// Search within Stack fields
+		if ($field instanceof Stack || $field instanceof Panel) {
+			foreach ($field->lines as $nestedField) {
+				if ($this->findField($nestedField, $attribute)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }
