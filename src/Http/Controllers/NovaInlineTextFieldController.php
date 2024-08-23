@@ -4,11 +4,12 @@ namespace Outl1ne\NovaInlineTextField\Http\Controllers;
 
 use Exception;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 use Outl1ne\NovaInlineTextField\InlineText;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Fields\Stack;
-use Illuminate\Support\Collection;
+use Laravel\Nova\Panel;
 
 class NovaInlineTextFieldController extends Controller
 {
@@ -60,6 +61,15 @@ class NovaInlineTextFieldController extends Controller
 			// Search within Stack fields
 			if (get_class($field) === Stack::class) {
 				foreach ($field->lines as $nestedField) {
+					if ($this->isCorrectInlineTextField($nestedField, $attribute)) {
+						return $nestedField;
+					}
+				}
+			}
+
+            // Search within Panel fields
+			if (get_class($field) === Panel::class) {
+				foreach ($field->data as $nestedField) {
 					if ($this->isCorrectInlineTextField($nestedField, $attribute)) {
 						return $nestedField;
 					}
