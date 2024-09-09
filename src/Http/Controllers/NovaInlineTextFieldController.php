@@ -4,9 +4,12 @@ namespace Outl1ne\NovaInlineTextField\Http\Controllers;
 
 use Exception;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 use Outl1ne\NovaInlineTextField\InlineText;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Panel;
 
 class NovaInlineTextFieldController extends Controller
 {
@@ -33,9 +36,7 @@ class NovaInlineTextFieldController extends Controller
                     ->firstWhere(fn (Lens $lens) => $lens->uriKey() === $lensUri);
             }
             $allFields = collect($resource->fields($request));
-            $field = $allFields->first(function ($field) use ($attribute) {
-                return get_class($field) === InlineText::class && $field->attribute === $attribute;
-            });
+            $field = $this->findField($allFields, $attribute);
 
             $field->fillInto($request, $model, $attribute);
             $model->save();
@@ -45,4 +46,45 @@ class NovaInlineTextFieldController extends Controller
 
         return response('', 204);
     }
+
+	/**
+	 * Recursively search for the field, including nested Stack fields.
+	 */
+	protected function findField(Collection $fields, String $attribute): InlineText|null
+	{
+		foreach ($fields as $field) {
+			// Direct match with InlineText field
+			if ($this->isCorrectInlineTextField($field, $attribute)) {
+				return $field;
+			}
+
+			// Search within Stack fields
+			if (get_class($field) === Stack::class) {
+				foreach ($field->lines as $nestedField) {
+					if ($this->isCorrectInlineTextField($nestedField, $attribute)) {
+						return $nestedField;
+					}
+				}
+			}
+
+            // Search within Panel fields
+			if (get_class($field) === Panel::class) {
+				foreach ($field->data as $nestedField) {
+					if ($this->isCorrectInlineTextField($nestedField, $attribute)) {
+						return $nestedField;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check if the field is the InlineText field.
+	 */
+	protected function isCorrectInlineTextField($field, $attribute): bool
+	{
+		return get_class($field) === InlineText::class && $field->attribute === $attribute;
+	}
 }
