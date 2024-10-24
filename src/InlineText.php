@@ -15,6 +15,13 @@ class InlineText extends Text
         return parent::resolveAttribute($resource, $attribute);
     }
 
+    public function withinRelation(string $modelClass): self
+    {
+        return $this->withMeta(['extraData' => [
+            'relationClass' => $modelClass,
+        ]]);
+    }
+
     public function resolve($resource, $attribute = null)
     {
         parent::resolve($resource, $attribute);
