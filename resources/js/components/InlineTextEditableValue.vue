@@ -89,7 +89,10 @@ export default {
         );
       } catch (e) {
         console.error(e);
-        Nova.error(this.__('There was a problem submitting the form.'));
+
+        let error = e.response?.data?.error;
+
+        Nova.error(error ? error : this.__('There was a problem submitting the form.'));
       }
       this.loading = false;
     },
