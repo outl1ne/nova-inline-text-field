@@ -4,12 +4,13 @@ namespace Outl1ne\NovaInlineTextField\Http\Controllers;
 
 use Exception;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Outl1ne\NovaInlineTextField\InlineText;
+use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
-use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Panel;
+use Outl1ne\NovaInlineTextField\InlineText;
 
 class NovaInlineTextFieldController extends Controller
 {
@@ -18,6 +19,8 @@ class NovaInlineTextFieldController extends Controller
         $modelId = $request->_inlineResourceId;
         $attribute = $request->_inlineAttribute;
         $lensUri = $request->_lensUri;
+
+        $relationClass = Arr::get($request->get('extraData'), 'relationClass');
 
         $resourceClass = $request->resource();
         $resourceValidationRules = $resourceClass::rulesForUpdate($request);
@@ -29,6 +32,14 @@ class NovaInlineTextFieldController extends Controller
 
         // Find field in question
         try {
+            if ($relationClass) {
+                (new $relationClass)->find($modelId)->update([
+                    $attribute => $request->{$attribute},
+                ]);
+
+                return response('', 204);
+            }
+
             $model = $request->model()->find($modelId);
             $resource = new $resourceClass($model);
             if ($lensUri) {

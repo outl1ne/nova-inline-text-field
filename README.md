@@ -38,6 +38,18 @@ public function fields(Request $request) {
 }
 ```
 
+### Within relation
+
+If you want to use this field within a BelongsToMany relation, editing from relation index view,
+be sure to use ``withinRelation()`` method, providing pivot model class string as a parameter.
+
+```php
+BelongsToMany::make('Some model')
+    ->fields(function ($request, $relatedModel) {
+        InlineText::make('Pivot attribute')->withinRelation(SomeModelPivot::class),
+    }),
+```
+
 ## Credits
 
 - [Tarvo Reinpalu](https://github.com/tarpsvo)
